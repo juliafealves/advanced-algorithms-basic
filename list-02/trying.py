@@ -16,9 +16,12 @@ for letter in all_letters:
 	
 	if amount_letter % 2 == 0:
 		letter_palindrome += 1
-	elif one_impar:
-		letter_palindrome += 1
-		one_impar = False
+	else:
+		if one_impar:
+			letter_palindrome += 1
+			one_impar = False
+		elif amount_letter - 1 > 0:
+			letter_palindrome += 1	
 
 player_win = len(all_letters) - letter_palindrome
 

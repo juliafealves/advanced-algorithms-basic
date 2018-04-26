@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Author: Júlia Fernandes Alves. <juliafealves@gmail.com>
 # Handle: 239613
-# Problem: Hours and Minutes
+# Problem: Hours and Minutes - Ad-hoc
 
 while True:
     try:

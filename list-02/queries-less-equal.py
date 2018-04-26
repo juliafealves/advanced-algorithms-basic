@@ -30,12 +30,12 @@ output = ''
 
 for number in b:
     if a[0] > number:
-        valor = 0
+        value = 0
     elif a[-1] <= number:
-        valor = sizes[0]
+        value = sizes[0]
     else:
-        valor = binary_search(a, number, sizes[0])
+        value = binary_search(a, number, sizes[0])
 
-    output += str(valor) + ' '
+    output += str(value) + ' '
 
 print output.strip()

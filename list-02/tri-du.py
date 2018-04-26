@@ -4,4 +4,4 @@
 # Problem: Tri-du
 
 cards = map(int, raw_input().split())
-print cards[0] if cards[0] == cards[1] else max(cards)
+print max(cards)

@@ -7,20 +7,15 @@
 def binary_search(array, number, length):
     i, j = 0, length
 
-    while abs(i - j) > 1:
+    while i < j:
         middle = (i + j) / 2
 
         if array[middle] > number:
-            j = middle
+            j = middle - 1
         else:
-            i = middle
+            i = middle + 1
 
-    if i == 0 and array[i] > number:
-        return 0
-    elif j == length - 1 and array[j] < number:
-        return length
-    else:
-        return j
+    return j + 1
 
 
 sizes = map(int, raw_input().split())
@@ -35,14 +30,10 @@ for number in b:
     if number in visited.keys():
         output += str(visited[number]) + ' '
         continue
-    elif a[0] == a[-1] and sizes[0] > 1:
-        if a[0] == number or number > a[-1]:
-            visited[number] = sizes[0]
-        elif number < a[-1]:
-            visited[number] = 0
-
-        output += str(visited[number]) + ' '
-        continue
+    elif a[0] > number:
+        visited[number] = 0
+    elif a[-1] <= number:
+        visited[number] = sizes[0]
     else:
         visited[number] = binary_search(a, number, sizes[0])
 

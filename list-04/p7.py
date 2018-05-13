@@ -1,18 +1,20 @@
-# -*- coding: utf-8 -*-
-r, g, b = map(int, raw_input().split())
+# # -*- coding: utf-8 -*-
+red, green, blue = map(int, raw_input().split())
 bouquets = 0
 
-while r >= 3:
-    bouquets += r / 3
-    r %= 3
+if red == blue == green: bouquets = red
+else:
+    mix = 1
+    while mix <= 3:
+        if red >= mix and green >= mix and blue >= mix:
+            r = (red - mix)/3
+            g = (green - mix)/3
+            b = (blue - mix)/3
+            bouquets = max(bouquets, r + g + b + mix)
 
-while g >= 3:
-    bouquets += g / 3
-    g %= 3
+        mix += 1
 
-while b >= 3:
-    bouquets += b / 3
-    b %= 3
+    bouquets = max(bouquets, red / 3 + green / 3 + blue / 3)
 
-bouquets += min(r, g, b)
 print bouquets
+

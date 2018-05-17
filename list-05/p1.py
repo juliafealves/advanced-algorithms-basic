@@ -9,16 +9,22 @@ def cumulative_sum(array):
 def binary_search(array, number):
     i, j = 0, len(array)
 
-    while i < j:
+    while i <= j:
         m = (i + j) / 2
         middle = array[m]
-        before = array[m - 1]
 
-        if m - 1 >= 0:
-            if before <= number <= middle:
-                return m - 1 if before == number else m
-            elif before > number < middle: j = m - 1
-            else: i = m + 1
+        if middle == number: return m
+        elif middle < number:
+            after = m + 1
+
+            if after < len(array) and array[after] >= number: return after
+            i = after
+        elif middle > number:
+            before = m - 1
+
+            if before >= 0 and array[before] == number: return before
+            elif before >= 0 and array[before] < number: return m
+            j = before
 
     return m
 

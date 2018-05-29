@@ -1,19 +1,20 @@
 # Problem: https://www.urionlinejudge.com.br/judge/pt/problems/view/2562
 # -*- coding: utf-8 -*-
-def dfs(v, visited, adjacent, count):
+
+def dfs(v, visited, adjacent):
     visited[v] = True
+    global count
     count += 1
 
     for neighbor in adjacent[v]:
         if not visited[neighbor]:
-            return dfs(neighbor, visited, adjacent, count)
-
-    return count
+            dfs(neighbor, visited, adjacent)
 
 while True:
     try:
         n, m = map(int, raw_input().split())
         types = [[] for i in xrange(n+1)]
+        count = 0
 
         for i in xrange(m):
             a, b = map(int, raw_input().split())
@@ -22,5 +23,7 @@ while True:
 
         e = int(raw_input())
         visited = [False] * (n + 1)
-        print dfs(e, visited, types, 0)
+        dfs(e, visited, types)
+        print count
+
     except EOFError: break

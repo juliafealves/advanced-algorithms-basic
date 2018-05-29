@@ -1,60 +1,92 @@
+# Problem: https://www.urionlinejudge.com.br/judge/pt/problems/view/2485
+# -*- coding: utf-8 -*-
 from Queue import Queue
 
 queue = Queue()
 
+def with_worms(x, y, vertex_parent):
+    if adjacent[x][y] == 1:
+        vertex_visited = (x, y)
+
+        try: visited[vertex_visited]
+        except KeyError:
+            visited[vertex_visited] = True
+            queue.put([vertex_visited, vertex_parent])
+
 def bfs(adjacent):
     count = 0
-    parent_before = (-1, -1)
-    visited = {}
 
     while not queue.empty():
         vertex = queue.get()
         x, y = vertex[0][0], vertex[0][1]
-        vertex_parent = str(x) + str(y)
+        vertex_parent = (x, y)
         parent = vertex[1]
 
-        if y + 1 < len(adjacent[0]) and adjacent[x][y + 1] == 1:
-            vertex = str(x) + str(y + 1)
-
-            try: visited[vertex]
-            except ValueError:
-                visited[vertex] = True
-                queue.put((vertex, vertex_parent))
-
-        if x + 1 < len(adjacent) and y + 1 < len(adjacent[0]) and adjacent[x + 1][y + 1] == 1:
-            queue.put([(x + 1, y + 1), (x, y)])
-
-        if x + 1 < len(adjacent) and adjacent[x + 1][y] == 1:
-            queue.put([(x + 1, y), (x, y)])
-
-        if y - 1 >= 0 and adjacent[x][y - 1] == 1:
-            queue.put([(x, y - 1), (x, y)])
-
-        if x - 1 >= 0 and y - 1 >= 0 and adjacent[x - 1][y - 1] == 1:
-            queue.put([(x - 1, y - 1), (x, y)])
-
-        if x - 1 >= 0 and adjacent[x - 1][y] == 1:
-            queue.put([(x - 1, y), (x, y)])
-
-        if x - 1 >= 0 and y + 1 < len(adjacent[0]) and adjacent[x - 1][y + 1] == 1:
-            queue.put([(x - 1, y + 1), (x, y)])
-
-        if x + 1 < len(adjacent) and y - 1 >= 0 and adjacent[x + 1][y - 1] == 1:
-            queue.put([(x + 1, y - 1), (x, y)])
+        if x == 0 and y == 0:
+            with_worms(x + 1, y + 1, vertex_parent)
+            with_worms(x, y + 1, vertex_parent)
+            with_worms(x + 1, y, vertex_parent)
+        elif x == len(adjacent) - 1 and y == 0:
+            with_worms(x - 1, y + 1, vertex_parent)
+            with_worms(x, y + 1, vertex_parent)
+            with_worms(x - 1, y, vertex_parent)
+        elif x == len(adjacent) - 1 and y == len(adjacent[0]) - 1:
+            with_worms(x - 1, y - 1, vertex_parent)
+            with_worms(x, y - 1, vertex_parent)
+            with_worms(x - 1, y, vertex_parent)
+        elif x == 0 and y == len(adjacent[0]) - 1:
+            with_worms(x + 1, y - 1, vertex_parent)
+            with_worms(x + 1, y, vertex_parent)
+            with_worms(x, y - 1, vertex_parent)
+        elif x == 0:
+            with_worms(x + 1, y, vertex_parent)
+            with_worms(x + 1, y + 1, vertex_parent)
+            with_worms(x + 1, y - 1, vertex_parent)
+            with_worms(x, y + 1, vertex_parent)
+            with_worms(x, y - 1, vertex_parent)
+        elif y == 0:
+            with_worms(x, y + 1, vertex_parent)
+            with_worms(x - 1, y - 1, vertex_parent)
+            with_worms(x + 1, y + 1, vertex_parent)
+            with_worms(x - 1, y, vertex_parent)
+            with_worms(x + 1, y, vertex_parent)
+        elif y == len(adjacent[0]) - 1:
+            with_worms(x, y - 1, vertex_parent)
+            with_worms(x - 1, y - 1, vertex_parent)
+            with_worms(x + 1, y - 1, vertex_parent)
+            with_worms(x - 1, y, vertex_parent)
+            with_worms(x + 1, y, vertex_parent)
+        elif x == len(adjacent) - 1:
+            with_worms(x - 1, y, vertex_parent)
+            with_worms(x - 1, y + 1, vertex_parent)
+            with_worms(x - 1, y - 1, vertex_parent)
+            with_worms(x, y + 1, vertex_parent)
+            with_worms(x, y - 1, vertex_parent)
+        else:
+            with_worms(x - 1, y - 1, vertex_parent)
+            with_worms(x, y - 1, vertex_parent)
+            with_worms(x + 1, y + 1, vertex_parent)
+            with_worms(x + 1, y - 1, vertex_parent)
+            with_worms(x, y + 1, vertex_parent)
+            with_worms(x - 1, y + 1, vertex_parent)
+            with_worms(x - 1, y, vertex_parent)
+            with_worms(x + 1, y, vertex_parent)
 
         adjacent[x][y] = 'x'
 
-        if parent_before != parent:
+        try: is_parent[parent]
+        except KeyError:
             count += 1
-            parent_before = parent
+            is_parent[parent] = True
 
-    print count
-    print queue.queue
-    print adjacent
+    return count
 
 t = int(raw_input())
+
 for i in xrange(t):
     adjacent = []
+    visited = {}
+    is_parent = {}
     a, b = map(int, raw_input().split())
 
     for j in xrange(a):
@@ -63,4 +95,4 @@ for i in xrange(t):
 
     x, y = map(int, raw_input().split())
     queue.put([(x - 1, y - 1), (x - 1, y - 1)])
-    bfs(adjacent)
+    print bfs(adjacent)

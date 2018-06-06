@@ -1,98 +1,45 @@
-# Problem: https://www.urionlinejudge.com.br/judge/pt/problems/view/2485
-# -*- coding: utf-8 -*-
+# coding: utf-8
+from collections import defaultdict
+from collections import Counter
 from Queue import Queue
 
-queue = Queue()
+def get_children(vertex):
+    i, j = vertex
+    children = []
 
-def with_worms(x, y, vertex_parent):
-    if adjacent[x][y] == 1:
-        vertex_visited = (x, y)
+    if j < b - 1 and adjacent[i][j + 1] == 1: children.append((i, j + 1))
+    if i < a - 1 and j < b - 1 and adjacent[i + 1][j + 1] == 1: children.append((i + 1, j + 1))
+    if i < a - 1 and adjacent[i + 1][j] == 1: children.append((i + 1, j))
+    if i < a - 1 and j > 0 and adjacent[i + 1][j - 1] == 1: children.append((i + 1, j - 1))
+    if j > 0 and adjacent[i][j - 1] == 1: children.append((i, j - 1))
+    if i > 0 and j > 0 and adjacent[i - 1][j - 1] == 1: children.append((i - 1, j - 1))
+    if i > 0 and adjacent[i - 1][j] == 1: children.append((i - 1, j))
+    if i > 0 and j < b - 1 and adjacent[i - 1][j + 1] == 1: children.append((i - 1, j + 1))
 
-        try: visited[vertex_visited]
-        except KeyError:
-            visited[vertex_visited] = True
-            queue.put([vertex_visited, vertex_parent])
+    return children
 
-def bfs(adjacent):
-    count = 0
-
+def count_days():
     while not queue.empty():
         vertex = queue.get()
-        x, y = vertex[0][0], vertex[0][1]
-        vertex_parent = (x, y)
-        parent = vertex[1]
+        graph[vertex] = get_children(vertex)
 
-        if x == 0 and y == 0:
-            with_worms(x + 1, y + 1, vertex_parent)
-            with_worms(x, y + 1, vertex_parent)
-            with_worms(x + 1, y, vertex_parent)
-        elif x == len(adjacent) - 1 and y == 0:
-            with_worms(x - 1, y + 1, vertex_parent)
-            with_worms(x, y + 1, vertex_parent)
-            with_worms(x - 1, y, vertex_parent)
-        elif x == len(adjacent) - 1 and y == len(adjacent[0]) - 1:
-            with_worms(x - 1, y - 1, vertex_parent)
-            with_worms(x, y - 1, vertex_parent)
-            with_worms(x - 1, y, vertex_parent)
-        elif x == 0 and y == len(adjacent[0]) - 1:
-            with_worms(x + 1, y - 1, vertex_parent)
-            with_worms(x + 1, y, vertex_parent)
-            with_worms(x, y - 1, vertex_parent)
-        elif x == 0:
-            with_worms(x + 1, y, vertex_parent)
-            with_worms(x + 1, y + 1, vertex_parent)
-            with_worms(x + 1, y - 1, vertex_parent)
-            with_worms(x, y + 1, vertex_parent)
-            with_worms(x, y - 1, vertex_parent)
-        elif y == 0:
-            with_worms(x, y + 1, vertex_parent)
-            with_worms(x - 1, y - 1, vertex_parent)
-            with_worms(x + 1, y + 1, vertex_parent)
-            with_worms(x - 1, y, vertex_parent)
-            with_worms(x + 1, y, vertex_parent)
-        elif y == len(adjacent[0]) - 1:
-            with_worms(x, y - 1, vertex_parent)
-            with_worms(x - 1, y - 1, vertex_parent)
-            with_worms(x + 1, y - 1, vertex_parent)
-            with_worms(x - 1, y, vertex_parent)
-            with_worms(x + 1, y, vertex_parent)
-        elif x == len(adjacent) - 1:
-            with_worms(x - 1, y, vertex_parent)
-            with_worms(x - 1, y + 1, vertex_parent)
-            with_worms(x - 1, y - 1, vertex_parent)
-            with_worms(x, y + 1, vertex_parent)
-            with_worms(x, y - 1, vertex_parent)
-        else:
-            with_worms(x - 1, y - 1, vertex_parent)
-            with_worms(x, y - 1, vertex_parent)
-            with_worms(x + 1, y + 1, vertex_parent)
-            with_worms(x + 1, y - 1, vertex_parent)
-            with_worms(x, y + 1, vertex_parent)
-            with_worms(x - 1, y + 1, vertex_parent)
-            with_worms(x - 1, y, vertex_parent)
-            with_worms(x + 1, y, vertex_parent)
+    print graph.items()
 
-        adjacent[x][y] = 'x'
 
-        try: is_parent[parent]
-        except KeyError:
-            count += 1
-            is_parent[parent] = True
-
-    return count
-
-t = int(raw_input())
-
-for i in xrange(t):
-    adjacent = []
-    visited = {}
-    is_parent = {}
+q = int(raw_input())
+for i in xrange(q):
     a, b = map(int, raw_input().split())
+    adjacent = []
 
-    for j in xrange(a):
-        line = map(int, raw_input().split())
-        adjacent.append(line)
+    for j in xrange(a): adjacent.append(map(int, raw_input().split()))
 
     x, y = map(int, raw_input().split())
-    queue.put([(x - 1, y - 1), (x - 1, y - 1)])
-    print bfs(adjacent)
+    queue = Queue()
+    visited = Counter()
+    graph = defaultdict(list)
+
+    vertex = (x - 1, y - 1)
+    queue.put(vertex)
+    visited[vertex] = 0
+
+    print count_days()

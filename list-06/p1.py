@@ -1,5 +1,4 @@
-# Problem: https://www.urionlinejudge.com.br/judge/pt/problems/view/2562
-# -*- coding: utf-8 -*-
+# coding: utf-8
 
 def dfs(v, visited, adjacent):
     visited[v] = True

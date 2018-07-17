@@ -1,7 +1,7 @@
 # coding: utf-8
 from Queue import PriorityQueue
 from collections import defaultdict, Counter
-INFINITY = 1000000
+INFINITY = 100001000000
 
 def dijkstra(vertex, graph):
     priority_queue = PriorityQueue()
